@@ -1,10 +1,20 @@
 {
   "version": 1,
-  "updatedAt": 1790998058295,
+  "updatedAt": 1790998166246,
   "settings": {
     "playlist": "https://www.youtube.com/watch?v=XFLKN-CV_AA&list=PLibkV_ZauLXnTHvkhoweXOzJUFu7zU2Dq",
     "matchBy": "date"
   },
   "days": {},
-  "movies": {}
+  "movies": {
+    "1": {
+      "tmdbId": 13466,
+      "title": "October Sky",
+      "year": "1999",
+      "poster": "/umWrXCIWdcYPf764ruvMRCpG3cA.jpg",
+      "overview": "The true story of Homer Hickam, a coal miner's son who was inspired by the first Sputnik launch to take up rocketry against his father's wishes.",
+      "note": "",
+      "updatedAt": 1790998166246
+    }
+  }
 }
