@@ -1,0 +1,9 @@
+{
+  "name": "90-days-to-2027",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Daily tracker for the 90-day YouTube upload challenge (Oct 3 - Dec 31, 2026)",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

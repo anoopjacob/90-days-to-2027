@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>90 Days to 2027</title>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%235b5bd6'/><text x='16' y='21.5' font-family='system-ui' font-size='13' font-weight='700' fill='white' text-anchor='middle'>90</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <h1>90 Days to 2027</h1>
+        <p class="sub">Oct 3 – Dec 31, 2026 · one video a day<a id="playlistLink" class="sub-link" target="_blank" rel="noopener" hidden>Watch the playlist ↗</a></p>
+      </div>
+      <div class="top-actions" data-admin>
+        <span id="saveState" class="save-state" aria-live="polite"></span>
+        <span class="admin-badge" title="You're editing locally. Visitors see a read-only version.">Admin</span>
+        <button id="publishBtn" class="btn small primary" type="button" disabled>Publish</button>
+        <button id="settingsBtn" class="icon-btn" type="button" aria-label="Settings" title="Settings">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="stats" aria-label="Challenge stats">
+      <div class="stat"><span class="stat-label">Today</span><strong id="statToday">–</strong></div>
+      <div class="stat"><span class="stat-label">Published</span><strong id="statPublished">0</strong></div>
+      <div class="stat"><span class="stat-label">Streak</span><strong id="statStreak">0</strong></div>
+      <div class="stat"><span class="stat-label">Movies</span><strong id="statMovies">0</strong></div>
+      <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+    </section>
+
+    <nav class="tabs" role="tablist">
+      <button role="tab" type="button" data-tab="journey">Journey</button>
+      <button role="tab" type="button" data-tab="movies">Movie Recommendations</button>
+    </nav>
+
+    <main>
+      <section id="tab-journey" role="tabpanel">
+        <div class="toolbar">
+          <div class="chips" id="journeyFilter">
+            <button type="button" data-filter="all">All</button>
+            <button type="button" data-filter="open">In progress</button>
+            <button type="button" data-filter="done">Published</button>
+          </div>
+          <button type="button" class="btn small" id="syncQuick" data-admin>Sync playlist</button>
+        </div>
+        <ol class="days" id="dayList"></ol>
+      </section>
+
+      <section id="tab-movies" role="tabpanel" hidden>
+        <div class="toolbar">
+          <p class="muted small-text" id="moviesHint"></p>
+        </div>
+        <ol class="movie-grid" id="movieGrid"></ol>
+      </section>
+    </main>
+  </div>
+
+  <!-- Day editor -->
+  <dialog id="dayDialog" class="sheet">
+    <form id="dayForm" autocomplete="off">
+      <header class="sheet-head">
+        <div><p class="eyebrow" id="dayEyebrow"></p><h2 id="dayHeading"></h2></div>
+        <button type="button" class="icon-btn" data-close aria-label="Close">✕</button>
+      </header>
+      <div class="sheet-body">
+        <a id="dayPreview" class="preview" target="_blank" rel="noopener" hidden><img alt=""></a>
+        <label class="field"><span>Video title</span><input name="title" placeholder="What's today's video?"></label>
+        <label class="field"><span>YouTube link</span><input name="url" inputmode="url" placeholder="https://youtu.be/…"></label>
+        <fieldset class="field">
+          <legend>Progress</legend>
+          <div class="segmented" id="statusSeg"></div>
+        </fieldset>
+        <label class="field"><span>Daily update</span><textarea name="note" rows="4" placeholder="How did today go? Wins, lessons, ideas for tomorrow…"></textarea></label>
+      </div>
+      <footer class="sheet-foot">
+        <span class="spacer"></span>
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn primary">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Movie picker -->
+  <dialog id="movieDialog" class="sheet">
+    <form id="movieForm" autocomplete="off">
+      <header class="sheet-head">
+        <div><p class="eyebrow" id="movieEyebrow"></p><h2>Movie of the day</h2></div>
+        <button type="button" class="icon-btn" data-close aria-label="Close">✕</button>
+      </header>
+      <div class="sheet-body">
+        <div id="tmdbMissing" class="notice" hidden>
+          Add your TMDB API key in Settings to search movies.
+          <button type="button" class="btn small" data-open-settings>Open settings</button>
+        </div>
+        <div id="moviePicked" class="picked" hidden></div>
+        <div id="movieSearchWrap" class="search">
+          <input id="movieSearch" type="search" placeholder="Search movies on TMDB…">
+          <ul id="movieResults" class="results"></ul>
+        </div>
+        <label class="field"><span>Note</span><textarea name="note" rows="3" placeholder="Why this movie today?"></textarea></label>
+      </div>
+      <footer class="sheet-foot">
+        <button type="button" class="btn ghost danger" id="movieRemove">Remove</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn primary">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Settings -->
+  <dialog id="settingsDialog" class="sheet">
+    <form id="settingsForm" autocomplete="off">
+      <header class="sheet-head">
+        <div><p class="eyebrow">Setup</p><h2>Settings</h2></div>
+        <button type="button" class="icon-btn" data-close aria-label="Close">✕</button>
+      </header>
+      <div class="sheet-body">
+        <h3>YouTube playlist</h3>
+        <label class="field"><span>Playlist URL or ID</span><input name="playlist" placeholder="https://www.youtube.com/playlist?list=…"></label>
+        <label class="field">
+          <span>YouTube Data API key <em>optional</em></span>
+          <input name="ytKey" type="password" placeholder="AIza…">
+          <small>Without a key, each sync reads the playlist's latest 15 videos (fine if you sync every few days). With a key, the whole playlist is read.</small>
+        </label>
+        <label class="field">
+          <span>Match videos to days</span>
+          <select name="matchBy">
+            <option value="date">By upload date (Oct 3 = Day 1)</option>
+            <option value="order">By playlist order (needs API key)</option>
+          </select>
+        </label>
+        <div class="row"><button type="button" class="btn" id="syncBtn">Save &amp; sync now</button><span id="syncStatus" class="muted small-text"></span></div>
+
+        <h3>Movies</h3>
+        <label class="field">
+          <span>TMDB API key or read access token</span>
+          <input name="tmdbKey" type="password" placeholder="Paste key">
+          <small>Free at themoviedb.org → Settings → API.</small>
+        </label>
+
+        <h3>Backup</h3>
+        <p class="muted small-text">Changes save automatically to <code>public/data.json</code>. Press <b>Publish</b> to push them live. API keys stay private in <code>data/secrets.json</code>.</p>
+        <div class="row">
+          <button type="button" class="btn" id="exportBtn">Export JSON</button>
+          <button type="button" class="btn" id="importBtn">Import JSON</button>
+          <input type="file" id="importFile" accept="application/json,.json" hidden>
+        </div>
+      </div>
+      <footer class="sheet-foot">
+        <span class="spacer"></span>
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn primary">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

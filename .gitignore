@@ -1,0 +1,4 @@
+# Private, local-only: API keys and backups
+data/
+node_modules/
+.vercel/
